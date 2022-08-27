@@ -69,7 +69,7 @@ namespace PiPictureFrame.Api
         public byte Brightness { get; init; } = 75;
     }
 
-    public static class PiPictureFrameConfigExtensions
+    internal static class PiPictureFrameConfigExtensions
     {
         // ---------------- Fields ----------------
 

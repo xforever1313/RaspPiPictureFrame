@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="PiPictureFrame.Tests" />
+  </ItemGroup>
+
 </Project>
