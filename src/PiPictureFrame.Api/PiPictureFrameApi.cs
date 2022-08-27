@@ -24,10 +24,13 @@ namespace PiPictureFrame.Api
 
         public PiPictureFrameApi()
         {
+            this.ApiVersion = typeof( PiPictureFrameApi ).Assembly.GetName().Version ?? new Version( 0, 0, 0 );
             this.Settings = new SettingsMgr();
         }
 
         // ---------------- Properties ----------------
+
+        public Version ApiVersion { get; private set; }
 
         public SettingsMgr Settings { get; private set; }
 
