@@ -16,6 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Prometheus;
+
 var builder = WebApplication.CreateBuilder( args );
 
 // Add services to the container.
@@ -31,8 +33,14 @@ if( !app.Environment.IsDevelopment() )
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseAuthorization();
+app.UseEndpoints(
+    endpoints =>
+    {
+        endpoints.MapMetrics(
+            "/Metrics"
+        );
+    }
+);
 
 app.MapControllerRoute(
     name: "default",
