@@ -10,4 +10,8 @@
     <PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PiPictureFrame.Api\PiPictureFrame.Api.csproj" />
+  </ItemGroup>
+
 </Project>

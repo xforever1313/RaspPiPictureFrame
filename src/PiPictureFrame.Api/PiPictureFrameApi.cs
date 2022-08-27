@@ -33,6 +33,11 @@ namespace PiPictureFrame.Api
 
         // ---------------- Functions ----------------
 
+        public void Init()
+        {
+            this.Settings.LoadSettings();
+        }
+
         public void Dispose()
         {
             this.Settings.SaveSettings();

@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using PiPictureFrame.Api;
 using Prometheus;
 
 var builder = WebApplication.CreateBuilder( args );
@@ -46,4 +47,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}" );
 
-app.Run();
+// TODO: Make sigleton?
+using( var api = new PiPictureFrameApi() )
+{
+    api.Init();
+
+    app.Run();
+}
