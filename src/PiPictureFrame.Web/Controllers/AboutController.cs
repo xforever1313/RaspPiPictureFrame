@@ -16,17 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using PiPictureFrame.Web.Models;
 
 namespace PiPictureFrame.Web.Controllers
 {
-    public class HomeController : Controller
+    public class AboutController : Controller
     {
         // ---------------- Constructor ----------------
 
-        public HomeController()
+        public AboutController()
         {
         }
 
@@ -35,12 +33,6 @@ namespace PiPictureFrame.Web.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-
-        [ResponseCache( Duration = 0, Location = ResponseCacheLocation.None, NoStore = true )]
-        public IActionResult Error()
-        {
-            return View( new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier } );
         }
     }
 }
