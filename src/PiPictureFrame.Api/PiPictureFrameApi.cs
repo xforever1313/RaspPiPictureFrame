@@ -22,7 +22,22 @@ using PiPictureFrame.Api.Screens;
 
 namespace PiPictureFrame.Api
 {
-    public sealed class PiPictureFrameApi : IDisposable
+    public interface IPiPictureFrameApi
+    {
+        // ---------------- Properties ----------------
+
+        Version ApiVersion { get; }
+
+        IRenderer Renderer { get; }
+
+        IScreen Screen { get; }
+
+        SettingsMgr Settings { get; }
+
+        SystemController System { get; }
+    }
+
+    public sealed class PiPictureFrameApi : IPiPictureFrameApi, IDisposable
     {
         // ---------------- Fields ----------------
 

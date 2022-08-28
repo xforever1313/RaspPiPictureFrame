@@ -1,0 +1,29 @@
+﻿@using PiPictureFrame.Api
+@model SystemModel;
+
+@{
+    ViewData["System"] = "System Control";
+    IPiPictureFrameApi api = Model.Api;
+    string onOrOffText = api.Screen.IsOn ? "On" : "Off";
+}
+
+<div class="header">
+    <h1>System Control</h1>
+</div>
+
+<div class="content">
+
+    @await Html.PartialAsync( "~/Views/Shared/_Alert.cshtml", Model )
+
+    <form action="/System/Sleep/" method="post">
+        <p>
+            <input id="sleepButton" class="button-xlarge button-green pure-button" name="sleepButton" type="submit" value="Turn screen @onOrOffText" />
+        </p>
+    </form>
+    
+    <form action="/System/Exit/" method="post">
+        <p>
+            <input id="exitButton" class="button-xlarge button-blue pure-button" name="exitButton" type="submit" value="Exit to Desktop" />
+        </p>
+    </form>
+</div>

@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System.Diagnostics;
 using Mono.Options;
 using PiPictureFrame.Api;
 using Prometheus;
@@ -97,28 +96,11 @@ try
     // Add services to the container.
     builder.Services.AddControllersWithViews();
 
-    var app = builder.Build();
-
-    // Configure the HTTP request pipeline.
-    if( !app.Environment.IsDevelopment() )
+    ILogger apiLogger;
+    using( var logFactory = LoggerFactory.Create( logBuilder => logBuilder.AddSimpleConsole() ) )
     {
-        app.UseExceptionHandler( "/Home/Error" );
+        apiLogger = logFactory.CreateLogger( nameof( PiPictureFrameApi ) );
     }
-    app.UseStaticFiles();
-
-    app.UseRouting();
-    app.UseEndpoints(
-        endpoints =>
-        {
-            endpoints.MapMetrics(
-                "/Metrics"
-            );
-        }
-    );
-
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}" );
 
     var apiConfig = new PiPictureFrameApiConfig();
     if( string.IsNullOrEmpty( pictureDirectory ) == false )
@@ -129,14 +111,40 @@ try
         };
     }
 
-    async void System_OnExitRequest()
+    using( var api = new PiPictureFrameApi( apiConfig, apiLogger ) )
     {
-        await app.StopAsync();
-    }
+        builder.Services.AddSingleton<IPiPictureFrameApi>( api );
 
-    // TODO: Make sigleton?
-    using( var api = new PiPictureFrameApi( apiConfig, app.Logger ) )
-    {
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if( !app.Environment.IsDevelopment() )
+        {
+            app.UseExceptionHandler( "/Home/Error" );
+        }
+        app.UseStaticFiles();
+
+        app.UseRouting();
+        app.UseEndpoints(
+            endpoints =>
+            {
+                endpoints.MapMetrics(
+                    "/Metrics"
+                );
+            }
+        );
+
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}" );
+
+        async void System_OnExitRequest()
+        {
+            // Wait 5 seconds for the message to be sent back to the user.
+            await Task.Delay( TimeSpan.FromSeconds( 5 ) );
+            await app.StopAsync();
+        }
+
         try
         {
             api.System.OnExitRequest += System_OnExitRequest;

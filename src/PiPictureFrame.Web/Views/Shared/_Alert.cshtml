@@ -1,0 +1,15 @@
+﻿@model IAlert;
+
+@if( string.IsNullOrEmpty( Model.InfoMessage ) == false )
+{
+    <div>
+        @Model.InfoMessage
+    </div>
+}
+
+@if( string.IsNullOrEmpty( Model.ErrorMessage ) == false )
+{
+    <div>
+        @Model.ErrorMessage
+    </div>
+}
