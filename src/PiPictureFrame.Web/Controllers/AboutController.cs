@@ -17,6 +17,7 @@
 //
 
 using Microsoft.AspNetCore.Mvc;
+using PiPictureFrame.Api;
 
 namespace PiPictureFrame.Web.Controllers
 {
@@ -33,6 +34,21 @@ namespace PiPictureFrame.Web.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Credits()
+        {
+            return View( PiPictureFrameApi.Resources );
+        }
+
+        public IActionResult License()
+        {
+            return View( PiPictureFrameApi.Resources );
+        }
+
+        public IActionResult Readme()
+        {
+            return View( PiPictureFrameApi.Resources );
         }
     }
 }

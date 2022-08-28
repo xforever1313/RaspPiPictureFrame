@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Credits";
+}
+
+@using MarkdownSharp;
+@model PiPictureFrame.Api.Resources;
+
+@{
+    var markdown = new MarkdownSharp.Markdown();
+    string html = markdown.Transform( Model.GetCredits() );
+}
+
+<div class="content">
+    @Html.Raw( html )
+</div>

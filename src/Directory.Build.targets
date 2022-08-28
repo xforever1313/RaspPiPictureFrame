@@ -2,6 +2,7 @@
   <Import Project="$(MSBuildThisFileDirectory)\..\sethcs\Directory.Build.targets"/>
   
   <ItemGroup>
+    <PackageReference Update="MarkdownSharp.Portable" Version="1.0.2" />
     <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
     <PackageReference Update="Mono.Options" Version="6.12.0.148" />
     <PackageReference Update="prometheus-net.AspNetCore" Version="6.0.0" />
