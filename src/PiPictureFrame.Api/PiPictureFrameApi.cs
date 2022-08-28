@@ -41,6 +41,7 @@ namespace PiPictureFrame.Api
             this.Settings = new SettingsMgr();
             this.Screen = new PiTouchScreen( this.log );
             this.Renderer = new PqivRenderer( this.log );
+            this.System = new SystemController( this.log );
         }
 
         static PiPictureFrameApi()
@@ -50,15 +51,17 @@ namespace PiPictureFrame.Api
 
         // ---------------- Properties ----------------
 
+        public static Resources Resources { get; private set; }
+
         public Version ApiVersion { get; private set; }
 
         public IRenderer Renderer { get; private set; }
 
-        public static Resources Resources { get; private set; }
-
         public IScreen Screen { get; private set; }
 
         public SettingsMgr Settings { get; private set; }
+
+        public SystemController System { get; private set; }
 
         // ---------------- Functions ----------------
 
@@ -76,6 +79,10 @@ namespace PiPictureFrame.Api
 
         public void Dispose()
         {
+            this.log.LogInformation( "Stopping System Controller" );
+            IDisposable system = this.System;
+            system.Dispose();
+
             this.log.LogInformation( "Stopping Renderer." );
             this.Renderer.Dispose();
 

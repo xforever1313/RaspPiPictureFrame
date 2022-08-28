@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Diagnostics;
 using Mono.Options;
 using PiPictureFrame.Api;
 using Prometheus;
@@ -128,12 +129,25 @@ try
         };
     }
 
+    async void System_OnExitRequest()
+    {
+        await app.StopAsync();
+    }
+
     // TODO: Make sigleton?
     using( var api = new PiPictureFrameApi( apiConfig, app.Logger ) )
     {
-        api.Init();
+        try
+        {
+            api.System.OnExitRequest += System_OnExitRequest;
+            api.Init();
 
-        app.Run();
+            app.Run();
+        }
+        finally
+        {
+            api.System.OnExitRequest -= System_OnExitRequest;
+        }
     }
 
     return 0;
