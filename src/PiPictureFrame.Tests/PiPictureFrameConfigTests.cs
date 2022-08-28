@@ -23,12 +23,6 @@ namespace PiPictureFrame.Tests
     [TestClass]
     public sealed class PiPictureFrameConfigTests
     {
-        // ---------------- Fields ----------------
-
-        private static readonly DirectoryInfo photoDirectory = new DirectoryInfo(
-            typeof( PiPictureFrameConfigTests ).Assembly.Location
-        );
-
         // ---------------- Tests ----------------
 
         [TestMethod]
@@ -40,7 +34,6 @@ namespace PiPictureFrame.Tests
                 AwakeTime = null,
                 Brightness = 50,
                 PhotoChangeInterval = TimeSpan.Zero,
-                PhotoDirectory = photoDirectory.FullName,
                 PhotoRefreshInterval = TimeSpan.Zero,
                 SleepTime = null
             };
@@ -62,7 +55,6 @@ namespace PiPictureFrame.Tests
                 AwakeTime = new TimeOnly( 5, 10, 50 ),
                 Brightness = 50,
                 PhotoChangeInterval = TimeSpan.FromHours( 1 ),
-                PhotoDirectory = photoDirectory.FullName,
                 PhotoRefreshInterval = TimeSpan.FromHours( 2 ),
                 SleepTime = new TimeOnly( 15, 5, 6 )
             };
@@ -84,7 +76,6 @@ namespace PiPictureFrame.Tests
                 AwakeTime = new TimeOnly( 1, 2, 3 ),
                 Brightness = 101,
                 PhotoChangeInterval = TimeSpan.FromMilliseconds( -1 ),
-                PhotoDirectory = photoDirectory.FullName,
                 PhotoRefreshInterval = TimeSpan.FromMilliseconds( -1 ),
                 SleepTime = new TimeOnly( 11, 12, 13 )
             };

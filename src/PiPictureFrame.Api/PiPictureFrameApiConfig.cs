@@ -1,4 +1,4 @@
-//
+﻿//
 // PiPictureFrame - Digital Picture Frame built for the Raspberry Pi.
 // Copyright (C) 2022 Seth Hendrick
 // 
@@ -16,43 +16,19 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using PiPictureFrame.Api;
-using Prometheus;
-
-var builder = WebApplication.CreateBuilder( args );
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if( !app.Environment.IsDevelopment() )
+namespace PiPictureFrame.Api
 {
-    app.UseExceptionHandler( "/Home/Error" );
-}
-app.UseStaticFiles();
-
-app.UseRouting();
-app.UseEndpoints(
-    endpoints =>
+    public record PiPictureFrameApiConfig
     {
-        endpoints.MapMetrics(
-            "/Metrics"
-        );
+        // ---------------- Fields ----------------
+
+        private static readonly DirectoryInfo DefaultPhotoDirectory =
+            new DirectoryInfo(
+                Environment.GetFolderPath( Environment.SpecialFolder.MyPictures )
+            );
+
+        // ---------------- Properties ----------------
+
+        public DirectoryInfo PictureDirectory { get; init; } = DefaultPhotoDirectory;
     }
-);
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}" );
-
-var apiConfig = new PiPictureFrameApiConfig();
-
-// TODO: Make sigleton?
-using( var api = new PiPictureFrameApi( apiConfig, app.Logger ) )
-{
-    api.Init();
-
-    app.Run();
 }

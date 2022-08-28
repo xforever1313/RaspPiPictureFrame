@@ -24,11 +24,6 @@ namespace PiPictureFrame.Api
 {
     public record PiPictureFrameConfig
     {
-        // ---------------- Fields ----------------
-
-        private static readonly string DefaultPhotoDirectory =
-            Environment.GetFolderPath( Environment.SpecialFolder.MyPictures );
-
         // ---------------- Properties ----------------
 
         /// <summary>
@@ -42,13 +37,6 @@ namespace PiPictureFrame.Api
         /// Null for never.
         /// </summary>
         public TimeOnly? AwakeTime { get; init; } = null;
-
-        /// <summary>
-        /// The directory to search for photos.
-        /// Directory should contains symlinks to other directories that contain
-        /// photos.
-        /// </summary>
-        public string PhotoDirectory { get; init; } = DefaultPhotoDirectory;
 
         /// <summary>
         /// How often to check for photos on the disk.  0 or less
@@ -88,7 +76,6 @@ namespace PiPictureFrame.Api
                 xmlElementName,
                 new XElement( "SleepTime", config.SleepTime?.ToString( "r", CultureInfo.InvariantCulture ) ?? "" ),
                 new XElement( "AwakeTime", config.AwakeTime?.ToString( "r", CultureInfo.InvariantCulture ) ?? "" ),
-                new XElement( "PhotoDirectory", config.PhotoDirectory ),
                 new XElement( "PhotoRefreshInterval", config.PhotoRefreshInterval.TotalMinutes.ToString() ),
                 new XElement( "PhotoChangeInterval", config.PhotoChangeInterval.TotalSeconds.ToString() ),
                 new XElement( "Brightness", config.Brightness.ToString() )
@@ -153,13 +140,6 @@ namespace PiPictureFrame.Api
                             )
                         };
                     }
-                }
-                else if( name.EqualsIgnoreCase( "PhotoDirectory" ) )
-                {
-                    config = config with
-                    {
-                        PhotoDirectory = child.Value
-                    };
                 }
                 else if( name.EqualsIgnoreCase( "PhotoRefreshInterval" ) )
                 {
