@@ -41,11 +41,18 @@ namespace PiPictureFrame.Api
             this.Renderer = new PqivRenderer( log );
         }
 
+        static PiPictureFrameApi()
+        {
+            Resources = new Resources();
+        }
+
         // ---------------- Properties ----------------
 
         public Version ApiVersion { get; private set; }
 
         public IRenderer Renderer { get; private set; }
+
+        public static Resources Resources { get; private set; }
 
         public SettingsMgr Settings { get; private set; }
 

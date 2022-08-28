@@ -24,6 +24,7 @@ bool showHelp = false;
 bool showVersion = false;
 bool showLicense = false;
 bool showCredits = false;
+bool showReadme = false;
 string pictureDirectory = "";
 
 var options = new OptionSet
@@ -42,6 +43,11 @@ var options = new OptionSet
         "print_license",
         "Prints the software license and exits.",
         v => showLicense = ( v is not null )
+    },
+    {
+        "print_readme",
+        "Prints Readme and exits.",
+        v => showReadme = ( v is not null )
     },
     {
         "print_credits",
@@ -72,6 +78,11 @@ try
     else if( showLicense )
     {
         PrintLicense();
+        return 0;
+    }
+    else if( showReadme )
+    {
+        PrintReadme();
         return 0;
     }
     else if( showCredits )
@@ -156,10 +167,21 @@ void PrintVersion()
 
 void PrintLicense()
 {
-    // TODO
+    Console.WriteLine(
+        PiPictureFrameApi.Resources.GetLicense()
+    );
+}
+
+void PrintReadme()
+{
+    Console.WriteLine(
+        PiPictureFrameApi.Resources.GetReadme()
+    );
 }
 
 void PrintCredits()
 {
-    // TODO
+    Console.WriteLine(
+        PiPictureFrameApi.Resources.GetCredits()
+    );
 }
