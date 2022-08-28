@@ -2,12 +2,10 @@
     ViewData["Title"] = "License";
 }
 
-@using MarkdownSharp;
 @model PiPictureFrame.Api.Resources;
 
 @{
-    var markdown = new MarkdownSharp.Markdown();
-    string html = markdown.Transform( Model.GetLicense() );
+    string html = MarkdownToHtmlConverter.Convert( Model.GetLicense() );
 }
 
 <div class="content">

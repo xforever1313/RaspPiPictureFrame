@@ -2,12 +2,10 @@
     ViewData["Title"] = "Readme";
 }
 
-@using MarkdownSharp;
 @model PiPictureFrame.Api.Resources;
 
 @{
-    var markdown = new MarkdownSharp.Markdown();
-    string html = markdown.Transform( Model.GetReadme() );
+    string html = MarkdownToHtmlConverter.Convert( Model.GetReadme() );
 }
 
 <div class="content">
