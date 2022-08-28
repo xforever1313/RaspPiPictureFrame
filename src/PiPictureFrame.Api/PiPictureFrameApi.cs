@@ -18,6 +18,7 @@
 
 using Microsoft.Extensions.Logging;
 using PiPictureFrame.Api.Renders;
+using PiPictureFrame.Api.Screens;
 
 namespace PiPictureFrame.Api
 {
@@ -38,7 +39,8 @@ namespace PiPictureFrame.Api
 
             this.ApiVersion = typeof( PiPictureFrameApi ).Assembly.GetName().Version ?? new Version( 0, 0, 0 );
             this.Settings = new SettingsMgr();
-            this.Renderer = new PqivRenderer( log );
+            this.Screen = new PiTouchScreen( this.log );
+            this.Renderer = new PqivRenderer( this.log );
         }
 
         static PiPictureFrameApi()
@@ -54,6 +56,8 @@ namespace PiPictureFrame.Api
 
         public static Resources Resources { get; private set; }
 
+        public IScreen Screen { get; private set; }
+
         public SettingsMgr Settings { get; private set; }
 
         // ---------------- Functions ----------------
@@ -63,6 +67,9 @@ namespace PiPictureFrame.Api
             this.Settings.LoadSettings();
             this.log.LogInformation( "User Settings Loaded." );
 
+            this.Screen.Refresh();
+            this.log.LogInformation( "Refreshed Screen Settings." );
+
             this.Renderer.Init( this.apiConfig.PictureDirectory );
             this.log.LogInformation( "Renderer Started." );
         }
@@ -71,6 +78,9 @@ namespace PiPictureFrame.Api
         {
             this.log.LogInformation( "Stopping Renderer." );
             this.Renderer.Dispose();
+
+            this.log.LogInformation( "Stopping Screen." );
+            this.Screen.Dispose();
 
             this.log.LogInformation( "Usr Settings Saved." );
             this.Settings.SaveSettings();
