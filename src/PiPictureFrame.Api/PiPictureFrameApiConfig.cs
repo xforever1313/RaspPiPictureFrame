@@ -22,7 +22,7 @@ namespace PiPictureFrame.Api
     {
         // ---------------- Fields ----------------
 
-        private static readonly DirectoryInfo DefaultPhotoDirectory =
+        public static readonly DirectoryInfo DefaultPhotoDirectory =
             new DirectoryInfo(
                 Environment.GetFolderPath( Environment.SpecialFolder.MyPictures )
             );

@@ -3,5 +3,7 @@
   
   <ItemGroup>
     <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+    <PackageReference Update="Mono.Options" Version="6.12.0.148" />
+    <PackageReference Update="prometheus-net.AspNetCore" Version="6.0.0" />
   </ItemGroup>
 </Project>
