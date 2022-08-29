@@ -18,23 +18,51 @@
 
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using PiPictureFrame.Api;
 using PiPictureFrame.Web.Models;
 
 namespace PiPictureFrame.Web.Controllers
 {
     public class HomeController : Controller
     {
+        // ---------------- Fields ----------------
+
+        private readonly IPiPictureFrameApi api;
+
         // ---------------- Constructor ----------------
 
-        public HomeController()
+        public HomeController( IPiPictureFrameApi api)
         {
+            this.api = api;
         }
 
         // ---------------- Functions ----------------
 
         public IActionResult Index()
         {
-            return View();
+            var model = new HomeModel(
+                Api: this.api,
+                InfoMessage: this.TempData["info_message"]?.ToString() ?? string.Empty,
+                ErrorMessage: this.TempData["error_message"]?.ToString() ?? string.Empty
+            );
+
+            return View( model );
+        }
+
+        [HttpPost]
+        public IActionResult ChangePicture()
+        {
+            try
+            {
+                this.api.Renderer.GoToNextPicture();
+                this.TempData["info_message"] = $"Picture Changed!";
+            }
+            catch( Exception e )
+            {
+                this.TempData["error_message"] = e.Message;
+            }
+
+            return RedirectToAction( nameof( Index ) );
         }
 
         [ResponseCache( Duration = 0, Location = ResponseCacheLocation.None, NoStore = true )]

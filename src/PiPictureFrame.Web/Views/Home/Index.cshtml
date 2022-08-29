@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HomeModel;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -8,6 +10,9 @@
 </div>
 
 <div class="content">
+
+    @await Html.PartialAsync( "~/Views/Shared/_Alert.cshtml", Model )
+
     <h2 class="content-subhead">Current Image:</h2>
     <p>
         TODO
@@ -15,7 +20,7 @@
         <!-- <img src="current.jpg" alt="Current Image" width="400" height="300" /> -->
     </p>
 
-    <form action="/changepicture.html" method="post">
+    <form action="/Home/ChangePicture/" method="post">
         <p>
             <input id="changeImageButton" class="button-xlarge button-blue pure-button" name="changeImageButton" type="submit" value="Change Image Now" />
         </p>
