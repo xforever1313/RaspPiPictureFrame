@@ -1,3 +1,3 @@
 <Project>
-  <Import Project="$(MSBuildThisFileDirectory)\..\sethcs\Directory.Build.props"/>
+  <Import Project="$(MSBuildThisFileDirectory)\..\SethCS\Directory.Build.props"/>
 </Project>

@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="$(MSBuildThisFileDirectory)\..\sethcs\Directory.Build.targets"/>
+  <Import Project="$(MSBuildThisFileDirectory)\..\SethCS\Directory.Build.targets"/>
   
   <ItemGroup>
     <PackageReference Update="Markdig" Version="0.30.3" />
