@@ -81,6 +81,14 @@ namespace PiPictureFrame.Api.Screens
 
         private void RefreshIsOn()
         {
+            if( File.Exists( powerFile ) == false )
+            {
+                this.log.LogWarning(
+                    $"{nameof( PiTouchScreen )} - Missing file '{powerFile}', can not refresh."
+                );
+                return;
+            }
+
             lock( this.powerFileLock )
             {
                 string isOnString = this.ReadFile( powerFile );
@@ -100,6 +108,14 @@ namespace PiPictureFrame.Api.Screens
 
         private void RefreshBrightness()
         {
+            if( File.Exists( brightnessFile ) == false )
+            {
+                this.log.LogWarning(
+                    $"{nameof( PiTouchScreen )} - Missing file '{brightnessFile}', can not refresh."
+                );
+                return;
+            }
+
             lock( this.brightnessFileLock )
             {
                 string isOnString = this.ReadFile( brightnessFile );
