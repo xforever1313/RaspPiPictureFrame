@@ -242,14 +242,15 @@ namespace PiPictureFrame.Api.Renders
             {
                 string line = e.Data;
 
-                // First, print what we got.
-                this.log.LogWarning( "PQIV: " + line );
-
-                // Then update current.jpg.
                 Match match = currentPictureRegex.Match( line );
                 if( match.Success )
                 {
+                    this.log.LogDebug( "PQIV: " + line );
                     this.CurrentPicturePath = new FileInfo( match.Groups["fileName"].Value );
+                }
+                else
+                {
+                    this.log.LogWarning( "PQIV: " + line );
                 }
             }
         }
