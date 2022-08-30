@@ -140,18 +140,24 @@ namespace PiPictureFrame.Api.Renders
             //        commands. This option conflicts with --additional-from-stdin.
             //        in shuffle mode.
 
-            info.Arguments = "--fullscreen --hide-info-box --fade --scale-images-up --end-of-files-action=wrap --shuffle --watch-directories --actions-from-stdin \"" + pictureDirectory + "\"";
+            // Disable libav (ffmpeg) since it seems to cause a lockup with pqiv.
+            info.Arguments = "--disable-backends=libav --fullscreen --hide-info-box --fade --scale-images-up --end-of-files-action=wrap --shuffle --watch-directories --actions-from-stdin \"" + pictureDirectory.FullName + "\"";
             info.RedirectStandardInput = true;
             info.RedirectStandardOutput = true;
+            info.RedirectStandardError = true;
             info.UseShellExecute = false;
             info.CreateNoWindow = true;
             info.FileName = defaultPqivLocation;
 
+            this.log.LogInformation( "Starting Pqiv with arguments: " + info.Arguments );
+
             this.pqivProcess = new Process();
             this.pqivProcess.StartInfo = info;
             this.pqivProcess.OutputDataReceived += this.StdoutProcessor;
+            this.pqivProcess.ErrorDataReceived += this.StderrProcessor;
             this.pqivProcess.Start();
             this.pqivProcess.BeginOutputReadLine();
+            this.pqivProcess.BeginErrorReadLine();
 
             // So we can see what the current picture is.
             this.pqivProcess.StandardInput.WriteLine( "set_status_output(1)" );
@@ -245,6 +251,14 @@ namespace PiPictureFrame.Api.Renders
                 {
                     this.CurrentPicturePath = new FileInfo( match.Groups["fileName"].Value );
                 }
+            }
+        }
+
+        private void StderrProcessor( object sender, DataReceivedEventArgs e )
+        {
+            if( ( e is not null ) && ( string.IsNullOrEmpty( e.Data ) == false ) )
+            {
+                this.log.LogWarning( "PQIV STDERR: " + e.Data );
             }
         }
     }

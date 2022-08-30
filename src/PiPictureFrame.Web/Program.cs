@@ -55,7 +55,7 @@ var options = new OptionSet
         v => showCredits = ( v is not null )
     },
     {
-        "picture_directory",
+        "picture_directory=",
         $"Sets the directory of where to find pictures to render.  If not specfied, defaulted to: '{PiPictureFrameApiConfig.DefaultPhotoDirectory.FullName}'",
         v => pictureDirectory = v
     }
