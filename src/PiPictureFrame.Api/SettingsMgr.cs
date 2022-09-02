@@ -22,6 +22,10 @@ namespace PiPictureFrame.Api
 {
     public sealed class SettingsMgr
     {
+        // ---------------- Events ----------------
+
+        public event Action<PiPictureFrameConfig>? OnUpdatedSettings;
+
         // ---------------- Fields ----------------
 
         private static readonly DirectoryInfo settingsDirectory =
@@ -65,6 +69,15 @@ namespace PiPictureFrame.Api
 
             XDocument doc = this.Settings.ToXml();
             doc.Save( settingsFile.FullName );
+        }
+
+        public void UpdateSettings( PiPictureFrameConfig config )
+        {
+            ArgumentNullException.ThrowIfNull( config );
+
+            this.Settings = config;
+            SaveSettings();
+            this.OnUpdatedSettings?.Invoke( this.Settings );
         }
     }
 }
