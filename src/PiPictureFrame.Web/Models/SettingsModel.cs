@@ -66,7 +66,7 @@ namespace PiPictureFrame.Web.Models
             };
         }
 
-        public static SettingsModel FromApiConfig( this PiPictureFrameConfig config )
+        public static SettingsModel FromApiConfig( this PiPictureFrameConfig config, string infoMessage, string errorMessage )
         {
             return new SettingsModel(
                 AwakeHour: Enums.TryConvertEnum<Hour>( config.AwakeTime?.Hour ?? 0 ) ?? Hour.Hour_0,
@@ -77,8 +77,8 @@ namespace PiPictureFrame.Web.Models
                 DisableSleep: config.SleepTime is null,
                 Brightness: Enums.TryConvertEnum<Brightness>( config.Brightness ) ?? Brightness.Brightness_75,
                 ChangeInterval: Enums.TryConvertEnum<ChangeIntervals>( (int)config.PhotoChangeInterval.TotalSeconds ) ?? ChangeIntervals.Minutes_1,
-                "",
-                ""
+                infoMessage,
+                errorMessage
             );
         }
     }

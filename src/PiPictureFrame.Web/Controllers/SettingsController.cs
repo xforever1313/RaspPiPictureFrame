@@ -39,8 +39,37 @@ namespace PiPictureFrame.Web.Controllers
 
         public IActionResult Index()
         {
-            SettingsModel model = this.api.Settings.Settings.FromApiConfig();
+            if( this.TempData["desired_model"] is SettingsModel model )
+            {
+                // Use desired model, which is settings the user put in.
+            }
+            else
+            {
+                model = this.api.Settings.Settings.FromApiConfig(
+                    this.TempData["info_message"]?.ToString() ?? string.Empty,
+                    this.TempData["error_message"]?.ToString() ?? string.Empty
+                );
+            }
+
             return View( model );
+        }
+
+        [HttpPost]
+        public IActionResult Update( [FromForm] SettingsModel model )
+        {
+            try
+            {
+                PiPictureFrameConfig config = model.ToApiConfig();
+                this.api.Settings.UpdateSettings( config );
+                this.TempData["info_message"] = "Settings updated successfully!";
+            }
+            catch( Exception e )
+            {
+                this.TempData["error_message"] = e.Message;
+                this.TempData["desired_model"] = model;
+            }
+
+            return RedirectToAction( nameof( Index ) );
         }
     }
 }

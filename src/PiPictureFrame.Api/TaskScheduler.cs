@@ -34,9 +34,9 @@ namespace PiPictureFrame.Api
 
         private readonly IScheduler scheduler;
 
-        private readonly IJobDetail? screenOnJob;
-        private readonly IJobDetail? screenOffJob;
-        private readonly IJobDetail? nextPictureJob;
+        private IJobDetail? screenOnJob;
+        private IJobDetail? screenOffJob;
+        private IJobDetail? nextPictureJob;
 
         private PiPictureFrameConfig? lastConfig;
 
@@ -80,11 +80,11 @@ namespace PiPictureFrame.Api
                 }
                 else
                 {
-                    return getter( config );
+                    return getter( this.lastConfig );
                 }
             }
 
-            TimeSpan? ReadSpan( Func<PiPictureFrameConfig, TimeSpan?> getter )
+            TimeSpan? ReadSpan( Func<PiPictureFrameConfig, TimeSpan> getter )
             {
                 if( this.lastConfig is null )
                 {
@@ -92,23 +92,32 @@ namespace PiPictureFrame.Api
                 }
                 else
                 {
-                    return getter( config );
+                    TimeSpan span = getter( this.lastConfig );
+
+                    // If our timespan is less than or equal to zero,
+                    // return null to show that we don't want a job scheduled.
+                    if( span <= TimeSpan.Zero )
+                    {
+                        return null;
+                    }
+
+                    return span;
                 }
             }
 
-            UpdateCronTask<ScreenOnJob>(
+            this.screenOnJob = UpdateCronTask<ScreenOnJob>(
                 ReadTime( c => c.AwakeTime ),
                 config.AwakeTime,
                 this.screenOnJob
             );
 
-            UpdateCronTask<ScreenOnJob>(
+            this.screenOffJob = UpdateCronTask<ScreenOffJob>(
                 ReadTime( c => c.SleepTime ),
                 config.SleepTime,
                 this.screenOnJob
             );
 
-            UpdateTimeSpanTask<NextPictureJob>(
+            this.nextPictureJob = UpdateTimeSpanTask<NextPictureJob>(
                 ReadSpan( c => c.PhotoChangeInterval ),
                 config.PhotoChangeInterval,
                 this.nextPictureJob
@@ -155,7 +164,7 @@ namespace PiPictureFrame.Api
                 .Build();
 
             TimeOnly time = newValue.Value;
-            string cronString = $"{time.Second} {time.Minute} {time.Hour} * * *";
+            string cronString = $"{time.Second} {time.Minute} {time.Hour} * * ?";
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity( $"{jobName}_trigger" )
