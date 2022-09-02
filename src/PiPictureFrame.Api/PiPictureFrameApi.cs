@@ -41,6 +41,8 @@ namespace PiPictureFrame.Api
     {
         // ---------------- Fields ----------------
 
+        private readonly TaskScheduler taskScheduler;
+
         private readonly PiPictureFrameApiConfig apiConfig;
 
         private readonly ILogger log;
@@ -57,6 +59,8 @@ namespace PiPictureFrame.Api
             this.Screen = new PiTouchScreen( this.log );
             this.Renderer = new PqivRenderer( this.log );
             this.System = new SystemController( this.log );
+
+            this.taskScheduler = new TaskScheduler( this, this.log );
         }
 
         static PiPictureFrameApi()
@@ -90,11 +94,20 @@ namespace PiPictureFrame.Api
 
             this.Renderer.Init( this.apiConfig.PictureDirectory );
             this.log.LogInformation( "Renderer Started." );
+
+            this.taskScheduler.UpdateTasks( this.Settings.Settings );
+            this.Settings.OnUpdatedSettings += Settings_OnUpdatedSettings;
+            this.taskScheduler.Start();
+            this.log.LogInformation( "Task Scheduler Started." );
         }
 
         public void Dispose()
         {
-            this.log.LogInformation( "Stopping System Controller" );
+            this.log.LogInformation( "Stopping Task Scheduler." );
+            this.Settings.OnUpdatedSettings -= Settings_OnUpdatedSettings;
+            this.taskScheduler.Dispose();
+
+            this.log.LogInformation( "Stopping System Controller." );
             IDisposable system = this.System;
             system.Dispose();
 
@@ -106,6 +119,11 @@ namespace PiPictureFrame.Api
 
             this.log.LogInformation( "Usr Settings Saved." );
             this.Settings.SaveSettings();
+        }
+
+        private void Settings_OnUpdatedSettings( PiPictureFrameConfig newSettings )
+        {
+            this.taskScheduler.UpdateTasks( newSettings );
         }
     }
 }
