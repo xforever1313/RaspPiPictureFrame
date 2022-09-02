@@ -1,0 +1,135 @@
+﻿@model SettingsModel;
+
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="header">
+    <h1>Rasp Pi Picture Frame</h1>
+    <h2>Settings</h2>
+</div>
+
+<div class="content">
+    @await Html.PartialAsync( "~/Views/Shared/_Alert.cshtml", Model )
+
+    <form class="pure-form" action="/Settings/Update/" method="POST">
+        <h2 class="content-subhead">Change Sleep/Awake Time:</h2>
+        <p>
+            <label for="sleepTimeHour">Turn off screen at:</label>
+        </p>
+        <p>
+            <select id="sleepTimeHour" name="SleepHour">
+                @foreach( Hour hour in Enum.GetValues<Hour>() )
+                {
+                    if( Model.SleepHour == hour )
+                    {
+                        <option value="@((int)hour)" selected>@((int)hour)</option>
+                    }
+                    else
+                    {
+                        <option value="@((int)hour)">@((int)hour)</option>
+                    }
+                }
+            </select>
+            :
+            <select id="sleepTimeMin" name="SleepMinute">
+                @foreach( Minute minute in Enum.GetValues<Minute>() )
+                {
+                    if( Model.SleepMinute == minute )
+                    {
+                        <option value="@((int)minute)" selected>@((int)minute)</option>
+                    }
+                    else
+                    {
+                        <option value="@((int)minute)">@((int)minute)</option>
+                    }
+                }
+            </select>
+        </p>
+        <p class="pure-checkbox">
+            <input id="noSleepCheckbox" name="DisableSleep" type="checkbox" title="Never go to sleep" @(Model.DisableSleep ? "checked" : "") />
+            <label for="noSleepCheckBox">Never go to sleep</label>
+        </p>
+        <p>
+            <label for="sleepTimeHour">Turn on screen at:</label>
+        </p>
+        <p>
+            <select id="awakeTimeHour" name="AwakeHour">
+                @foreach( Hour hour in Enum.GetValues<Hour>() )
+                {
+                    if( Model.AwakeHour == hour )
+                    {
+                        <option value="@((int)hour)" selected>@((int)hour)</option>
+                    }
+                    else
+                    {
+                        <option value="@((int)hour)">@((int)hour)</option>
+                    }
+                }
+            </select>
+            :
+            <select id="awakeTimeMin" name="AwakeMinute">
+                @foreach( Minute minute in Enum.GetValues<Minute>() )
+                {
+                    if( Model.AwakeMinute == minute )
+                    {
+                        <option value="@((int)minute)" selected>@((int)minute)</option>
+                    }
+                    else
+                    {
+                        <option value="@((int)minute)">@((int)minute)</option>
+                    }
+                }
+            </select>
+        </p>
+        <p class="pure-checkbox">
+            <input id="noAwakeCheckbox" name="DisableAwake" type="checkbox" @(Model.DisableAwake ? "checked" : "") />
+            <label for="noAwakeCheckBox">Never wake up.</label>
+        </p>
+
+        <h2 class="content-subhead">Brightness:</h2>
+        <p>
+            <label for="brightness">How bright to make the screen (0-100)</label>
+        </p>
+        <p>
+            <select id="brightness" name="Brightness">
+                @foreach( Brightness brightness in Enum.GetValues<Brightness>() )
+                {
+                    if( Model.Brightness == brightness )
+                    {
+                        <option value="@((int)brightness)" selected>@((int)brightness)</option>
+                    }
+                    else
+                    {
+                        <option value="@((int)brightness)">@((int)brightness)</option>
+                    }
+                }
+            </select>
+        </p>
+
+        <h2 class="content-subhead">Photo Change Interval:</h2>
+        <p>
+            <label for="interval">Change photo every __ minutes:</label>
+        </p>
+        <p>
+            <select id="interval" name="ChangeInterval">
+                @foreach( ChangeIntervals interval in Enum.GetValues<ChangeIntervals>() )
+                {
+                    string optionString = @TimeSpan.FromSeconds( (int)interval ).TotalMinutes.ToString( "F2" );
+                    if( Model.ChangeInterval == interval )
+                    {
+                        <option value="@((int)interval)" selected>@optionString</option>
+                    }
+                    else
+                    {
+                        <option value="@((int)interval)">@optionString</option>
+                    }
+                }
+            </select>
+        </p>
+
+        <p>
+            <input id="updateSettingsButton" class="button-xlarge button-blue pure-button" name="updateSettingsButton" type="submit" value="Update Settings" />
+        </p>
+    </form>
+</div>
