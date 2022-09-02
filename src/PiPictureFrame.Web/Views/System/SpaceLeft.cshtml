@@ -1,0 +1,80 @@
+﻿@using System.Text.RegularExpressions;
+@using PiPictureFrame.Api
+@model SpaceLeftModel;
+
+@{
+    ViewData["System"] = "Space Left";
+
+    string EscapeDriveName( string driveName )
+    {
+        string escapedName = Regex.Replace( driveName, @"[^\w]+", "_" );
+
+        if( escapedName == "_" )
+        {
+            escapedName = "_root";
+        }
+
+        return escapedName;
+    }
+}
+
+<div class="header">
+    <h1>Space Left on Frame</h1>
+</div>
+
+<div class="content">
+    <noscript><strong>Javascript required to see charts.</strong></noscript>
+
+    @if( Model.SpaceLeftOnDrives.Any() == false )
+    {
+        <p>
+            No drive information found.  An error may have prevented
+            reading the drive info.  See log for more information.
+        </p>
+    }
+    else
+    {
+        @foreach( SpaceOnDriveInfo driveInfo in Model.SpaceLeftOnDrives )
+        {
+            <div>
+                <h3>@driveInfo.DriveName</h3>
+                <canvas id="@EscapeDriveName( driveInfo.DriveName )" width="100" height="100" style="max-width:500px;max-height:500px;"></canvas>
+                <p>
+                    Used @driveInfo.UsedGigaBytes.ToString( "F2" )GB of @driveInfo.TotalSizeGigaBytes.ToString("F2")GB.
+                </p>
+                <p>
+                    Space Remaining: @driveInfo.AvailableFreeSpceGigaBytes.ToString("F2")GB.
+                </p>
+            </div>
+            <br/>
+        }
+    }
+</div>
+
+@section scripts{
+    <script src="/js/chart_bundle_min.js"></script>
+    <script>
+        onload = function(){
+            @foreach( SpaceOnDriveInfo driveInfo in Model.SpaceLeftOnDrives )
+            {
+                string escapedName = EscapeDriveName(driveInfo.DriveName);
+                @:var ctx_@escapedName = document.getElementById("@escapedName");
+                @:var data_@escapedName = {
+                    @:labels: ["Space Used (GB)", "Space Remaining (GB)"],
+                    @:datasets: [
+                        @:{
+                            @:data: [@driveInfo.UsedGigaBytes.ToString( "F2" ), @driveInfo.AvailableFreeSpceGigaBytes.ToString("F2")],
+                            @:backgroundColor: ["#FF6384", "#36A2EB"], hoverBackgroundColor: ["#FF6384", "#36A2EB"]
+                        @:}
+                    @:]
+                @:}
+                @:var chart_@escapedName = new Chart(
+                    @:ctx_@escapedName,
+                    @:{
+                        @:type: 'doughnut', data: data_@escapedName, animation: { animateScale: true }
+                    @:}
+                @:);
+            }
+        };
+    </script>
+}

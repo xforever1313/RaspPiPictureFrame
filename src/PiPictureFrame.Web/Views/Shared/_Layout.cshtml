@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="~/css/pure/pure-min.css" />
     <link rel="stylesheet" href="~/css/pure/side-menu.css">
+
+    @RenderSection("extrahead", required: false)
 </head>
 <body>
     <div id="layout">
@@ -24,7 +26,7 @@
                 <ul class="pure-menu-list">
                     <li class="pure-menu-item"><a href="/Home/" class="pure-menu-link">Home</a></li>
                     <li class="pure-menu-item"><a href="settings.html" class="pure-menu-link">Settings</a></li>
-                    <li class="pure-menu-item"><a href="space.html" class="pure-menu-link">Space Left</a></li>
+                    <li class="pure-menu-item"><a href="/System/SpaceLeft/" class="pure-menu-link">Space Left</a></li>
                     <li class="pure-menu-item"><a href="/About/" class="pure-menu-link">About</a></li>
                     <li class="pure-menu-item"><a href="/System/" class="pure-menu-link">System</a></li>
                 </ul>
@@ -38,5 +40,8 @@
     </div>
 
     <script src="/js/pure/ui.js"></script>
+
+    <!-- Page-specific scripts -->
+    @RenderSection("scripts", required: false)
 </body>
 </html>

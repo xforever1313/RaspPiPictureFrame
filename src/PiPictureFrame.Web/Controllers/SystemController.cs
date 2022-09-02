@@ -30,6 +30,12 @@ namespace PiPictureFrame.Web.Controllers
             return View( model );
         }
 
+        public IActionResult SpaceLeft()
+        {
+            var model = new SpaceLeftModel( this.api.System.GetDriveInfo() );
+            return View( model );
+        }
+
         [HttpPost]
         public IActionResult Sleep()
         {

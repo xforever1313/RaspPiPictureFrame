@@ -48,6 +48,42 @@ namespace PiPictureFrame.Api
             // Nothing to do.
         }
 
+        public IEnumerable<SpaceOnDriveInfo> GetDriveInfo()
+        {
+            var driveInfos = new List<SpaceOnDriveInfo>();
+
+            try
+            {
+                foreach( DriveInfo drive in DriveInfo.GetDrives() )
+                {
+                    if( drive.IsReady == false )
+                    {
+                        continue;
+                    }
+                    // Skip any temp file systems or anything like that.
+                    else if( drive.TotalSize <= 0 )
+                    {
+                        continue;
+                    }
+
+                    var driveInfo = new SpaceOnDriveInfo(
+                        DriveName: drive.Name,
+                        AvailableFreeSpace: drive.AvailableFreeSpace,
+                        TotalSize: drive.TotalSize
+                    );
+                    driveInfos.Add( driveInfo );
+                }
+            }
+            catch( IOException e )
+            {
+                this.log.LogError(
+                    "Error getting drive information: " + Environment.NewLine + e
+                );
+            }
+
+            return driveInfos;
+        }
+
         public void ExitProcess()
         {
             this.log.LogInformation( "Request made to exit the process" );
