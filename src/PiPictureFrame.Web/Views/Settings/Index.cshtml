@@ -48,7 +48,7 @@
             </select>
         </p>
         <p class="pure-checkbox">
-            <input id="noSleepCheckbox" name="DisableSleep" type="checkbox" @(Model.DisableSleep ? "checked" : "") />
+            <input asp-for="@Model.DisableSleep" />
             <label for="noSleepCheckBox">Never go to sleep</label>
         </p>
         <p>
@@ -85,7 +85,7 @@
             </select>
         </p>
         <p class="pure-checkbox">
-            <input id="noAwakeCheckbox" name="DisableAwake" type="checkbox" @(Model.DisableAwake ? "checked" : "") />
+            <input asp-for="@Model.DisableAwake"/>
             <label for="noAwakeCheckBox">Never wake up.</label>
         </p>
 
