@@ -5,15 +5,19 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiPictureFrame.Web", "PiPictureFrame.Web\PiPictureFrame.Web.csproj", "{9533554F-F798-4DF0-83DD-667BD8D8A53D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiPictureFrame.Api", "PiPictureFrame.Api\PiPictureFrame.Api.csproj", "{2FC6ABC5-C182-4790-B081-35262F911A8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiPictureFrame.Api", "PiPictureFrame.Api\PiPictureFrame.Api.csproj", "{2FC6ABC5-C182-4790-B081-35262F911A8E}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS", "..\SethCS\LibSethCS\LibSethCS.csproj", "{B919C11D-3EC3-4906-B66B-E3682B9A1872}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiPictureFrame.Tests", "PiPictureFrame.Tests\PiPictureFrame.Tests.csproj", "{04F27B30-DD92-44EC-8BC8-5FAD451F0D98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiPictureFrame.Tests", "PiPictureFrame.Tests\PiPictureFrame.Tests.csproj", "{04F27B30-DD92-44EC-8BC8-5FAD451F0D98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.Analyzer", "..\SethCS\Seth.Analyzer\Seth.Analyzer.csproj", "{3002D00F-02A6-4098-BD25-4B1ED9D62606}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.CakeLib", "..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj", "{85BDB383-C2B6-417A-B22F-866D98C9A172}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevOps", "DevOps\DevOps.csproj", "{A4787964-0A85-49BE-90AB-FE9299E208EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,14 @@ Global
 		{3002D00F-02A6-4098-BD25-4B1ED9D62606}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3002D00F-02A6-4098-BD25-4B1ED9D62606}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3002D00F-02A6-4098-BD25-4B1ED9D62606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85BDB383-C2B6-417A-B22F-866D98C9A172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85BDB383-C2B6-417A-B22F-866D98C9A172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85BDB383-C2B6-417A-B22F-866D98C9A172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85BDB383-C2B6-417A-B22F-866D98C9A172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4787964-0A85-49BE-90AB-FE9299E208EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4787964-0A85-49BE-90AB-FE9299E208EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4787964-0A85-49BE-90AB-FE9299E208EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4787964-0A85-49BE-90AB-FE9299E208EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
