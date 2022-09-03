@@ -34,6 +34,8 @@ namespace DevOps
             this.Solution = this.SrcDir.CombineWithFilePath( "PiPictureFrame.sln" );
             this.TestResultsFolder = this.RepoRoot.Combine( "TestResults" );
             this.TestCsProj = this.SrcDir.CombineWithFilePath( "PiPictureFrame.Tests/PiPictureFrame.Tests.csproj" );
+            this.WebCsProj = this.SrcDir.CombineWithFilePath( "PiPictureFrame.Web/PiPictureFrame.Web.csproj" );
+            this.DistDirectory = this.RepoRoot.Combine( "dist" );
         }
 
         // ---------------- Properties ----------------
@@ -47,5 +49,9 @@ namespace DevOps
         public DirectoryPath TestResultsFolder { get; private set; }
 
         public FilePath TestCsProj { get; private set; }
+
+        public FilePath WebCsProj { get; private set; }
+
+        public DirectoryPath DistDirectory { get; private set; }
     }
 }
