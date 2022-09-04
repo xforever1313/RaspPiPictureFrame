@@ -12,7 +12,7 @@ def CallDevops( String arguments )
 
 def Prepare()
 {
-    X13Cmd( 'dotnet tool update Cake.Tool --tool-path ./Cake' )
+    X13Cmd( 'dotnet tool update Cake.Tool --version=2.0.0 --tool-path ./Cake' )
     CallCake( "--showdescription" )
 }
 
