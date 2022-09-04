@@ -106,7 +106,7 @@ namespace DevOps.DebPack
                 if( root is null )
                 {
                     throw new InvalidOperationException(
-                        $"Unable to get root document from {csProj}"
+                        $"Unable to get root element from {csProj}"
                     );
                 }
 
