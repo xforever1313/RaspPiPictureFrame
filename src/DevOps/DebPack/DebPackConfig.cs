@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Xml.Linq;
 using Cake.Common.Diagnostics;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Publish;
@@ -34,12 +35,15 @@ namespace DevOps.DebPack
 
         private readonly PlatformTarget target;
 
+        private readonly Version version;
+
         // ---------------- Constructor ----------------
 
         public DebPackConfig( BuildContext context, PlatformTarget target )
         {
             this.context = context;
-            this.target= target;
+            this.target = target;
+            this.version = ParseVersion( context.WebCsProj );
         }
 
         // ---------------- Properties ----------------
@@ -59,8 +63,7 @@ namespace DevOps.DebPack
 
         public override uint PackageRevision => 0;
 
-        // TODO: Make version.
-        public override Version PackageVersion => new Version( 1, 0, 0 );
+        public override Version PackageVersion => this.version;
 
         /// <summary>
         /// Should work on any OS.
@@ -92,6 +95,37 @@ namespace DevOps.DebPack
                 this.context.WebCsProj.ToString(),
                 publishSettings
             );
+        }
+
+        private static Version ParseVersion( FilePath csProj )
+        {
+            using( var fStream = new FileStream( csProj.ToString(), FileMode.Open, FileAccess.Read ) )
+            {
+                XDocument doc = XDocument.Load( fStream );
+                XElement? root = doc.Root;
+                if( root is null )
+                {
+                    throw new InvalidOperationException(
+                        $"Unable to get root document from {csProj}"
+                    );
+                }
+
+                foreach( XElement element in root.Elements() )
+                {
+                    if( "PropertyGroup" == element.Name.LocalName )
+                    {
+                        foreach( XElement propertyGroup in element.Elements())
+                        {
+                            if( "Version" == propertyGroup.Name.LocalName )
+                            {
+                                return Version.Parse( propertyGroup.Value );
+                            }
+                        }
+                    }
+                }
+
+                throw new InvalidOperationException( $"Could not get version from {csProj}" );
+            }
         }
     }
 }
