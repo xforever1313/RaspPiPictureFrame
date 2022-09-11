@@ -67,7 +67,7 @@ namespace PiPictureFrame.Api
                 );
             }
 
-            using( var ostream = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.Write))
+            using( var ostream = new FileStream( fullPath, FileMode.OpenOrCreate, FileAccess.Write ) )
             {
                 fileStream.CopyTo( ostream );
             }
