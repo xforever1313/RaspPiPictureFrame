@@ -28,6 +28,8 @@ namespace PiPictureFrame.Api
 
         Version ApiVersion { get; }
 
+        FileManager FileManager { get; }
+
         IRenderer Renderer { get; }
 
         IScreen Screen { get; }
@@ -55,6 +57,7 @@ namespace PiPictureFrame.Api
             this.log = log;
 
             this.ApiVersion = typeof( PiPictureFrameApi ).Assembly.GetName().Version ?? new Version( 0, 0, 0 );
+            this.FileManager = new FileManager( this.apiConfig.PictureDirectory );
             this.Settings = new SettingsMgr();
             this.Screen = new PiTouchScreen( this.log );
             this.Renderer = new PqivRenderer( this.log );
@@ -73,6 +76,8 @@ namespace PiPictureFrame.Api
         public static Resources Resources { get; private set; }
 
         public Version ApiVersion { get; private set; }
+
+        public FileManager FileManager { get; private set; }
 
         public IRenderer Renderer { get; private set; }
 

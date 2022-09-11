@@ -16,38 +16,39 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Microsoft.AspNetCore.Mvc;
-using PiPictureFrame.Api;
-using PiPictureFrame.Web.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace PiPictureFrame.Web.Controllers
+namespace PiPictureFrame.Api
 {
-    public class UploadController : Controller
+    public sealed class FileManager
     {
         // ---------------- Fields ----------------
 
-        internal const string CreateNewDirectoryCode = "{^CREATE_NEW$}";
-
-        private readonly IPiPictureFrameApi api;
+        private readonly DirectoryInfo pictureDirectory;
 
         // ---------------- Constructor ----------------
 
-        public UploadController( IPiPictureFrameApi api )
+        public FileManager( DirectoryInfo pictureDirectory )
         {
-            this.api = api;
+            this.pictureDirectory = pictureDirectory;
         }
 
         // ---------------- Functions ----------------
 
-        public IActionResult Index()
+        public IEnumerable<string> GetSubDirectoryNames()
         {
-            var model = new PictureDirectoryModel(
-                DirectoryNames: this.api.FileManager.GetSubDirectoryNames(),
-                InfoMessage: this.TempData["info_message"]?.ToString() ?? string.Empty,
-                ErrorMessage: this.TempData["error_message"]?.ToString() ?? string.Empty
-            );
+            var dirNames = new List<string>();
 
-            return View( model );
+            foreach( DirectoryInfo subDir in this.pictureDirectory.GetDirectories() )
+            {
+                dirNames.Add( subDir.Name );
+            }
+
+            return dirNames;
         }
     }
 }
