@@ -1,4 +1,6 @@
-﻿@{
+﻿@model VersionModel;
+
+@{
     ViewData["Title"] = "About";
 }
 
@@ -9,8 +11,8 @@
 <div class="content">
     <h2>App Information</h2>
     <ul>
-        <li><strong>Version: </strong></li>
-        <li><strong>API Version: </strong></li>
+        <li><strong>Version: </strong>@Model.WebVersion.ToString( 3 )</li>
+        <li><strong>API Version: </strong>@Model.ApiVersion.ToString( 3 )</li>
     </ul>
 
     <h2>Documentation</h2>
@@ -18,6 +20,6 @@
         <li><a href="https://github.com/xforever1313/RaspPiPictureFrame" target="_blank" rel="noopener noreferrer nofollow">View Source</a></li>
         <li><a href="/About/License/">View License</a></li>
         <li><a href="/About/Credits/">View Credits</a></li>
-        <li><a href="/About/Readme/">View Read</a></li>
+        <li><a href="/About/Readme/">View Readme</a></li>
     </ul>
 </div>

@@ -18,22 +18,33 @@
 
 using Microsoft.AspNetCore.Mvc;
 using PiPictureFrame.Api;
+using PiPictureFrame.Web.Models;
 
 namespace PiPictureFrame.Web.Controllers
 {
     public class AboutController : Controller
     {
+        // ---------------- Fields ----------------
+
+        private readonly IPiPictureFrameApi api;
+
         // ---------------- Constructor ----------------
 
-        public AboutController()
+        public AboutController( IPiPictureFrameApi api )
         {
+            this.api = api;
         }
 
         // ---------------- Functions ----------------
 
         public IActionResult Index()
         {
-            return View();
+            var model = new VersionModel(
+                ApiVersion: this.api.ApiVersion,
+                typeof( AboutController ).Assembly.GetName().Version ?? new Version( 0, 0, 0 )
+            );
+
+            return View( model );
         }
 
         public IActionResult Credits()
