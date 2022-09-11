@@ -20,6 +20,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using PiPictureFrame.Api;
 using PiPictureFrame.Web.Models;
+using SethCS.Extensions;
 
 namespace PiPictureFrame.Web.Controllers
 {
@@ -71,7 +72,7 @@ namespace PiPictureFrame.Web.Controllers
                 if( string.IsNullOrWhiteSpace( uploadDirectory ) )
                 {
                     throw new ArgumentException(
-                        "Upload Directory Field can not be empty or just whitespace, please type something in this field."
+                        "Directory name must be specified when uploading toa new directory.  Please type something in this field."
                     );
                 }
 
@@ -81,7 +82,7 @@ namespace PiPictureFrame.Web.Controllers
                 {
                     try
                     {
-                        if( file.ContentType.StartsWith( "image", StringComparison.OrdinalIgnoreCase ) == false )
+                        if( file.ContentType.StartsWithIgnoreCase( "image" ) == false )
                         {
                             throw new InvalidOperationException( "Not an image file" );
                         }

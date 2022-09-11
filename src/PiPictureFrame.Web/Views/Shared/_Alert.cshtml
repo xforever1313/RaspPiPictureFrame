@@ -1,15 +1,22 @@
 ﻿@model IAlert;
+@using SethCS.Extensions;
 
 @if( string.IsNullOrEmpty( Model.InfoMessage ) == false )
 {
     <div>
-        @Model.InfoMessage
+        @foreach( string line in Model.InfoMessage.ReadLines() )
+        {
+            <p>@line</p>
+        }
     </div>
 }
 
 @if( string.IsNullOrEmpty( Model.ErrorMessage ) == false )
 {
     <div>
-        @Model.ErrorMessage
+        @foreach( string line in Model.ErrorMessage.ReadLines() )
+        {
+            <p>@line</p>
+        }
     </div>
 }
