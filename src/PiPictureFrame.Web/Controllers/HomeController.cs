@@ -31,7 +31,7 @@ namespace PiPictureFrame.Web.Controllers
 
         // ---------------- Constructor ----------------
 
-        public HomeController( IPiPictureFrameApi api)
+        public HomeController( IPiPictureFrameApi api )
         {
             this.api = api;
         }

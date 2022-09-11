@@ -1,21 +1,14 @@
-﻿{
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:36188",
-      "sslPort": 0
-    }
-  },
+{
   "profiles": {
     "PiPictureFrame.Web": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
+      "commandLineArgs": "--picture_directory=C:\\Users\\xfore.000\\Downloads\\test",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5163",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5163"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -23,6 +16,14 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:36188",
+      "sslPort": 0
     }
   }
 }

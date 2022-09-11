@@ -16,12 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace PiPictureFrame.Api
 {
     public sealed class FileManager
@@ -49,6 +43,34 @@ namespace PiPictureFrame.Api
             }
 
             return dirNames;
+        }
+
+        public void UploadPictureToDirectory(
+            string directoryName,
+            Stream fileStream,
+            string fileName
+        )
+        {
+            string fullPath = Path.Combine( this.pictureDirectory.FullName, directoryName );
+            DirectoryInfo uploadDirectory = new DirectoryInfo( fullPath );
+            if( uploadDirectory.Exists == false )
+            {
+                Directory.CreateDirectory( uploadDirectory.FullName );
+            }
+
+            fullPath = Path.Combine( fullPath, fileName );
+            if( File.Exists( fullPath ) )
+            {
+                throw new ArgumentException(
+                    $"File '{fileName}' already exists in {directoryName}",
+                    nameof( fileName )
+                );
+            }
+
+            using( var ostream = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                fileStream.CopyTo( ostream );
+            }
         }
     }
 }

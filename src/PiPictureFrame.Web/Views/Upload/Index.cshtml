@@ -16,7 +16,7 @@
     <form action="/Upload/DoUpload" method="post" enctype="multipart/form-data">
         <div>
             <h2>Step 1: Pick files to upload.</h2>
-            <input class="form-control" type="file" name="Images" accept="image/jpeg, image/png" />
+            <input class="form-control" type="file" name="FilesToUpload" accept="image/jpeg, image/png" />
         </div>
         <div>
             <h2>Step 2: Pick a Directory to upload them to.</h2>
@@ -32,7 +32,7 @@
             <div>
                 <h2>Step 2.5: If creating a new directory, type in new directory name below.</h2>
                 <div class="pure-g">
-                    <input class="pure-u-5-5" id="otherDirectoryText" type="text" name="OtherDirectory" />
+                    <input class="pure-u-5-5" id="otherDirectoryText" type="text" name="NewDirectoryName" />
                 </div>
             </div>
         </div>
