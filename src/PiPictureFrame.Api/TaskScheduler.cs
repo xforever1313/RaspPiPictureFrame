@@ -114,7 +114,7 @@ namespace PiPictureFrame.Api
             this.screenOffJob = UpdateCronTask<ScreenOffJob>(
                 ReadTime( c => c.SleepTime ),
                 config.SleepTime,
-                this.screenOnJob
+                this.screenOffJob
             );
 
             this.nextPictureJob = UpdateTimeSpanTask<NextPictureJob>(
