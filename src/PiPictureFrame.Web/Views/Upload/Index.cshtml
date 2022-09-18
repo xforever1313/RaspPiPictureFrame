@@ -16,7 +16,7 @@
     <form action="/Upload/DoUpload" method="post" enctype="multipart/form-data">
         <div>
             <h2>Step 1: Pick files to upload.</h2>
-            <input class="form-control" type="file" name="FilesToUpload" accept="image/jpeg, image/png" multiple/>
+            <input id="fileInput" class="form-control" type="file" name="FilesToUpload" accept="image/jpeg, image/png" oninput="fileInput_oninput(this);" multiple />
         </div>
         <div>
             <h2>Step 2: Pick a Directory to upload them to.</h2>
@@ -53,13 +53,17 @@
 @section scripts
 {
     <script>
+        var fileInput;
         var otherDirectoryTextBox;
         var uploadButton;
 
         window.onload = function()
         {
-            otherDirectoryTextBox = document.getElementById( "otherDirectoryText" );
             uploadButton = document.getElementById( "uploadButton" );
+            uploadButton.disabled = true; // Disabled by default since we won't have files right away.
+
+            fileInput = document.getElementById( "fileInput" );
+            otherDirectoryTextBox = document.getElementById( "otherDirectoryText" );
             otherDirectoryText_onchange( otherDirectoryTextBox );
         };
 
@@ -77,13 +81,20 @@
             otherDirectoryText_onchange( otherDirectoryTextBox );
         }
 
+        function fileInput_oninput( input )
+        {
+            otherDirectoryText_onchange( otherDirectoryTextBox );
+        }
+
         function otherDirectoryText_onchange( text )
         {
-            if (text.disabled === true) {
+            var fileSelected = fileInput.files.length > 0;
+            if ( text.disabled === true )
+            {
                 // If our text box is not enabled,
                 // it means that our selected value is not to create a new directory.
-                // Therefore, always enable the button.
-                uploadButton.disabled = false;
+                // Therefore, always enable the button, but only if we have a file selected.
+                uploadButton.disabled = !fileSelected;
             }
             else
             {
@@ -96,7 +107,7 @@
                 }
                 else
                 {
-                    uploadButton.disabled = false;
+                    uploadButton.disabled = !fileSelected;
                 }
             }
         }
