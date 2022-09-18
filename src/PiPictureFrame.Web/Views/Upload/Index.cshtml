@@ -21,8 +21,8 @@
         <div>
             <h2>Step 2: Pick a Directory to upload them to.</h2>
             <div class="pure-g">
-                <select class="pure-u-5-5" name="UploadDirectory">
-                    <option value="@UploadController.CreateNewDirectoryCode" selected>Upload to new Directory</option>
+                <select id="uploadDirectorySelect" class="pure-u-5-5" name="UploadDirectory" onchange="uploadDirectorySelect_onchange(this);">
+                    <option id="newDirectoryOption" value="@UploadController.CreateNewDirectoryCode" selected>Upload to new Directory</option>
                     @foreach( string directory in Model.DirectoryNames )
                     {
                         <option value="@directory">@directory</option>
@@ -32,14 +32,73 @@
             <div>
                 <h2>Step 2.5: If creating a new directory, type in new directory name below.</h2>
                 <div class="pure-g">
-                    <input class="pure-u-5-5" id="otherDirectoryText" type="text" name="NewDirectoryName" />
+                    <input 
+                        class="pure-u-5-5"
+                        id="otherDirectoryText"
+                        type="text"
+                        name="NewDirectoryName"
+                        oninput="otherDirectoryText_onchange(this)"
+                    />
                 </div>
             </div>
         </div>
         <div>
             <h2>Step 3: Upload!</h2>
-            <input id="UploadButton" class="button-xlarge button-blue pure-button" name="UploadButton" type="submit" value="Upload" />
+            <input id="uploadButton" class="button-xlarge button-blue pure-button" name="UploadButton" type="submit" value="Upload" />
         </div>
     </form>
 
 </div>
+
+@section scripts
+{
+    <script>
+        var otherDirectoryTextBox;
+        var uploadButton;
+
+        window.onload = function()
+        {
+            otherDirectoryTextBox = document.getElementById( "otherDirectoryText" );
+            uploadButton = document.getElementById( "uploadButton" );
+            otherDirectoryText_onchange( otherDirectoryTextBox );
+        };
+
+        function uploadDirectorySelect_onchange( select )
+        {
+            if( select.value === "@UploadController.CreateNewDirectoryCode" )
+            {
+                otherDirectoryTextBox.disabled = false;
+            }
+            else
+            {
+                otherDirectoryTextBox.disabled = true;
+            }
+
+            otherDirectoryText_onchange( otherDirectoryTextBox );
+        }
+
+        function otherDirectoryText_onchange( text )
+        {
+            if (text.disabled === true) {
+                // If our text box is not enabled,
+                // it means that our selected value is not to create a new directory.
+                // Therefore, always enable the button.
+                uploadButton.disabled = false;
+            }
+            else
+            {
+                // However, if our text box is enabled, it means that
+                // we do not want this text box to be blank.
+                // If it is blank, then disable the button until a new value is put in.
+                if( !text.value || ( text.value === "" ) )
+                {
+                    uploadButton.disabled = true;
+                }
+                else
+                {
+                    uploadButton.disabled = false;
+                }
+            }
+        }
+    </script>
+}
