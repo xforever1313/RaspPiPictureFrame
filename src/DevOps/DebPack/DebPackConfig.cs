@@ -16,8 +16,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using Cake.Common.Diagnostics;
+using Cake.Common.IO;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.MSBuild;
@@ -95,6 +97,30 @@ namespace DevOps.DebPack
                 this.context.WebCsProj.ToString(),
                 publishSettings
             );
+
+            AddUdevRules( packageRoot );
+        }
+
+        /// <summary>
+        /// Add UDEV rules so we can turn on and off the backlight, and adjust the brightness.
+        /// 
+        /// Taken from here: https://forums.raspberrypi.com/viewtopic.php?t=136749
+        /// </summary>
+        /// <param name="packageRoot"></param>
+        private void AddUdevRules( DirectoryPath packageRoot )
+        {
+            DirectoryPath udevFolder = packageRoot.Combine( "etc/udev/rules.d/" );
+            this.context.EnsureDirectoryExists( udevFolder );
+            this.context.CleanDirectory( udevFolder );
+
+            const string fileContents = "SUBSYSTEM==\"backlight\",RUN+=\"/bin/chmod 666 /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power\"";
+
+            FilePath backLightRulesFile = udevFolder.CombineWithFilePath( "backlight-permissions.rules" );
+            File.WriteAllText(
+                backLightRulesFile.FullPath,
+                fileContents
+            );
+
         }
 
         private static Version ParseVersion( FilePath csProj )
