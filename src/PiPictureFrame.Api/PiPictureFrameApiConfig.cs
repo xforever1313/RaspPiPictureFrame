@@ -28,23 +28,25 @@ namespace PiPictureFrame.Api
             );
 
         /// <remarks>
-        /// On some versions of Raspberry Pi OS, 10-0045 is simply
-        /// "rpi_backlight", but on modern versions, it appears
-        /// to be 10-0045, so we'll use that.
+        /// If, instead of "rpi_backlight"
+        /// it is "10-0045", you may need to configure config.txt
+        /// file and comment out dtoverlay=vc4-kms-v3d
+        /// and max_framebuffer=2.
         /// </remarks>
         public static readonly FileInfo DefaultRpiBacklightPowerFile =
             new FileInfo(
-                "/sys/class/backlight/10-0045/bl_power"
+                "/sys/class/backlight/rpi_backlight/bl_power"
             );
 
         /// <remarks>
-        /// On some versions of Raspberry Pi OS, 10-0045 is simply
-        /// "rpi_backlight", but on modern versions, it appears
-        /// to be 10-0045, so we'll use that.
+        /// If, instead of "rpi_backlight"
+        /// it is "10-0045", you may need to configure config.txt
+        /// file and comment out dtoverlay=vc4-kms-v3d
+        /// and max_framebuffer=2.
         /// </remarks>
         public static readonly FileInfo DefaultRpiBacklightBrightnessFile =
             new FileInfo(
-                "/sys/class/backlight/10-0045/brightness"
+                "/sys/class/backlight/rpi_backlight/brightness"
             );
 
         // ---------------- Properties ----------------

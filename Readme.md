@@ -28,9 +28,21 @@ This should be there by default if on a Raspberry Pi, but if its not:
 "autologin-user=userName"
 ```
 
+### Configuring Raspberry Pi Touch Screen
+
+By default, if using a Raspberry Pi, we look for the brightness and power files inside of ```/sys/class/backlight/rpi_backlight```.  If, instead, ```10-10045``` shows up instead of ```rpi_backlight``` in that path,
+you may need to configure the config.txt file in ```/boot```.  Comment out the following lines, especially if on a Raspberry Pi 3:
+
+```txt
+dtoverlay=vc4-kms-v3d
+max_framebuffers=2
+```
+
+Otherwise, sometimes at boot, the screen may stay blank.
+
 ### Security
 
-Force key login for SSH:
+**Force key login for SSH:**
 
 Edit /etc/ssh/sshd_config
 
@@ -38,6 +50,14 @@ Edit /etc/ssh/sshd_config
 PermitRootLogin no
 PasswordAuthentication no
 Port XXXX  # Change port if desired
+```
+
+**Disable Bluetooth:**
+
+Add the following line to ```/boot/config.txt```
+
+```txt
+dtoverlay=disable-bt
 ```
 
 ### Setting up Reverse Proxy (optional)
@@ -79,3 +99,5 @@ All non-user-configurable settings are set on the command line.  Since this is r
 * ```--version``` - Prints the version and exits.
 * ```--picture_directory=xxx``` - Sets the directory of where to find and upload pictures to xxx.  If not specified, this is defaulted the Pictures directory in your home directory.
 * ```--urls=``` - This is an ASP.Net argument.  This setting says who is allowed to connect to the web interface, and the port number.  To allow all incoming connections on port 9001, for example, set this to ```--urls=http://*:9001```.  To restrict only internal connections on port 9001 (e.g. when using a reverse proxy), set this to ```--urls=http://localhost:9001```.  See Microsoft's documentation [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/web-host?view=aspnetcore-6.0#server-urls) for more information about this argument.
+* ```--rpi_backlight_brightness_file=xxx``` - If, for some reason, the rpi_backlight/brightness file in /sys/class changes, override this argument to point to the new file so we can adjust the brightness.
+* ```--rpi_backlight_power_file=xxx``` - If, for some reason, the rpi_backlight/bl_power file in /sys/class changes, override this argument to point to the new file so we can turn the screen on and off.
