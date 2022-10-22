@@ -26,6 +26,8 @@ bool showLicense = false;
 bool showCredits = false;
 bool showReadme = false;
 string pictureDirectory = "";
+string rpiBacklightPowerFile = "";
+string rpiBacklightBrightnessFile = "";
 
 var options = new OptionSet
 {
@@ -58,6 +60,18 @@ var options = new OptionSet
         "picture_directory=",
         $"Sets the directory of where to find pictures to render.  If not specfied, defaulted to: '{PiPictureFrameApiConfig.DefaultPhotoDirectory.FullName}'",
         v => pictureDirectory = v
+    },
+    {
+        "rpi_backlight_brightness_file=",
+        $"Overrides the file that contains the brightness setting of the Raspberry Pi backlight touch screen.  " +
+            $"Ignored if not using that screen.  Defaulted to {PiPictureFrameApiConfig.DefaultRpiBacklightBrightnessFile.FullName}",
+        v => rpiBacklightBrightnessFile = v
+    },
+    {
+        "rpi_backlight_power_file=",
+        $"Overrides the file that contains the power setting of the Raspberry Pi backlight touch screen.  " +
+            $"Ignored if not using that screen.  Defaulted to {PiPictureFrameApiConfig.DefaultRpiBacklightPowerFile.FullName}",
+        v => rpiBacklightPowerFile = v
     }
 };
 
@@ -108,6 +122,22 @@ try
         apiConfig = apiConfig with
         {
             PictureDirectory = new DirectoryInfo( pictureDirectory )
+        };
+    }
+
+    if( string.IsNullOrEmpty( rpiBacklightPowerFile ) == false )
+    {
+        apiConfig = apiConfig with
+        {
+            RpiBacklightPowerFile = new FileInfo( rpiBacklightPowerFile )
+        };
+    }
+
+    if( string.IsNullOrEmpty( rpiBacklightBrightnessFile ) == false )
+    {
+        apiConfig = apiConfig with
+        {
+            RpiBacklightBrightnessFile = new FileInfo( rpiBacklightBrightnessFile )
         };
     }
 

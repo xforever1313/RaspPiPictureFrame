@@ -59,7 +59,7 @@ namespace PiPictureFrame.Api
             this.ApiVersion = typeof( PiPictureFrameApi ).Assembly.GetName().Version ?? new Version( 0, 0, 0 );
             this.FileManager = new FileManager( this.apiConfig.PictureDirectory );
             this.Settings = new SettingsMgr();
-            this.Screen = new PiTouchScreen( this.log );
+            this.Screen = new PiTouchScreen( this.apiConfig, this.log );
             this.Renderer = new PqivRenderer( this.log );
             this.System = new SystemController( this.log );
 

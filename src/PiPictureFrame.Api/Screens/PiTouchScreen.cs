@@ -27,12 +27,12 @@ namespace PiPictureFrame.Api.Screens
         /// <summary>
         /// File to control brightness.
         /// </summary>
-        private const string brightnessFile = "/sys/class/backlight/rpi_backlight/brightness";
+        private readonly FileInfo brightnessFile;
 
         /// <summary>
         /// File to turn on/off screen.
         /// </summary>
-        private const string powerFile = "/sys/class/backlight/rpi_backlight/bl_power";
+        private readonly FileInfo powerFile;
 
         private readonly ILogger log;
 
@@ -43,8 +43,10 @@ namespace PiPictureFrame.Api.Screens
 
         // ---------------- Constructor ----------------
 
-        public PiTouchScreen( ILogger log )
+        public PiTouchScreen( PiPictureFrameApiConfig config, ILogger log )
         {
+            this.brightnessFile = config.RpiBacklightBrightnessFile;
+            this.powerFile = config.RpiBacklightPowerFile;
             this.log = log;
             this.isLinux = ( Environment.OSVersion.Platform == PlatformID.Unix );
 
@@ -81,10 +83,10 @@ namespace PiPictureFrame.Api.Screens
 
         private void RefreshIsOn()
         {
-            if( File.Exists( powerFile ) == false )
+            if( this.powerFile.Exists == false )
             {
                 this.log.LogWarning(
-                    $"{nameof( PiTouchScreen )} - Missing file '{powerFile}', can not refresh."
+                    $"{nameof( PiTouchScreen )} - Missing file '{powerFile.FullName}', can not refresh."
                 );
                 return;
             }
@@ -108,10 +110,10 @@ namespace PiPictureFrame.Api.Screens
 
         private void RefreshBrightness()
         {
-            if( File.Exists( brightnessFile ) == false )
+            if( brightnessFile.Exists == false )
             {
                 this.log.LogWarning(
-                    $"{nameof( PiTouchScreen )} - Missing file '{brightnessFile}', can not refresh."
+                    $"{nameof( PiTouchScreen )} - Missing file '{brightnessFile.FullName}', can not refresh."
                 );
                 return;
             }
@@ -188,17 +190,17 @@ namespace PiPictureFrame.Api.Screens
             this.IsOn = newValue;
         }
 
-        private void WriteFile( string filePath, string value )
+        private void WriteFile( FileInfo filePath, string value )
         {
-            this.log.LogInformation( $"Writing '{value}' to: {filePath}" );
+            this.log.LogInformation( $"Writing '{value}' to: {filePath.FullName}" );
 
-            File.WriteAllText( filePath, value );
+            File.WriteAllText( filePath.FullName, value );
         }
 
-        private string ReadFile( string filePath )
+        private string ReadFile( FileInfo filePath )
         {
-            string fileContents = File.ReadAllText( filePath ).Trim();
-            this.log.LogInformation( $"Read '{fileContents}' from: {filePath}" );
+            string fileContents = File.ReadAllText( filePath.FullName ).Trim();
+            this.log.LogInformation( $"Read '{fileContents}' from: {filePath.FullName}" );
 
             return fileContents;
         }

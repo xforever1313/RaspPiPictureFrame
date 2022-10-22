@@ -27,8 +27,40 @@ namespace PiPictureFrame.Api
                 Environment.GetFolderPath( Environment.SpecialFolder.MyPictures )
             );
 
+        /// <remarks>
+        /// On some versions of Raspberry Pi OS, 10-0045 is simply
+        /// "rpi_backlight", but on modern versions, it appears
+        /// to be 10-0045, so we'll use that.
+        /// </remarks>
+        public static readonly FileInfo DefaultRpiBacklightPowerFile =
+            new FileInfo(
+                "/sys/class/backlight/10-0045/bl_power"
+            );
+
+        /// <remarks>
+        /// On some versions of Raspberry Pi OS, 10-0045 is simply
+        /// "rpi_backlight", but on modern versions, it appears
+        /// to be 10-0045, so we'll use that.
+        /// </remarks>
+        public static readonly FileInfo DefaultRpiBacklightBrightnessFile =
+            new FileInfo(
+                "/sys/class/backlight/10-0045/brightness"
+            );
+
         // ---------------- Properties ----------------
 
         public DirectoryInfo PictureDirectory { get; init; } = DefaultPhotoDirectory;
+
+        /// <summary>
+        /// When using the Raspberry PI Backlight touchscreen,
+        /// this is the file the controls if is on or off.
+        /// </summary>
+        public FileInfo RpiBacklightPowerFile { get; init; } = DefaultRpiBacklightPowerFile;
+
+        /// <summary>
+        /// When using the Raspberry Pi Backlight touchscreen,
+        /// this is the file that controls the brightness of the screen.
+        /// </summary>
+        public FileInfo RpiBacklightBrightnessFile { get; init; } = DefaultRpiBacklightBrightnessFile;
     }
 }
