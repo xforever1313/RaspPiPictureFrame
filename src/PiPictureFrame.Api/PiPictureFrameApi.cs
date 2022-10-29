@@ -95,6 +95,7 @@ namespace PiPictureFrame.Api
             this.log.LogInformation( "User Settings Loaded." );
 
             this.Screen.Refresh();
+            this.Screen.SetBrightness( this.Settings.Settings.Brightness );
             this.log.LogInformation( "Refreshed Screen Settings." );
 
             this.Renderer.Init( this.apiConfig.PictureDirectory );
@@ -129,6 +130,7 @@ namespace PiPictureFrame.Api
         private void Settings_OnUpdatedSettings( PiPictureFrameConfig newSettings )
         {
             this.taskScheduler.UpdateTasks( newSettings );
+            this.Screen.SetBrightness( newSettings.Brightness );
         }
     }
 }
