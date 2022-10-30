@@ -2,6 +2,25 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    string albumName = @Model.Api.Renderer.CurrentPicturePath?.DirectoryName ?? "";
+    string currentPicture = @Model.Api.Renderer.CurrentPicturePath?.Name ?? "";
+
+    string currentImage;
+    if(
+        ( string.IsNullOrWhiteSpace( albumName ) == false ) &&
+        ( string.IsNullOrWhiteSpace( currentPicture ) == false )
+    )
+    {
+        currentImage = $"{albumName}/{currentPicture}";
+    }
+    else if( string.IsNullOrWhiteSpace( currentPicture ) )
+    {
+        currentImage = "Unknown";
+    }
+    else if( string.IsNullOrWhiteSpace( albumName ) )
+    {
+        currentImage = currentPicture;
+    }
 }
 
 <div class="header">
@@ -15,7 +34,7 @@
 
     <h2 class="content-subhead">Current Image:</h2>
     <p>
-        TODO
+        @currentPicture
         <!-- Doesn't work yet.... current.jpg is too slow. -->
         <!-- <img src="current.jpg" alt="Current Image" width="400" height="300" /> -->
     </p>
