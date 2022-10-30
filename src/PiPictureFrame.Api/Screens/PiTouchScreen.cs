@@ -149,6 +149,13 @@ namespace PiPictureFrame.Api.Screens
                 );
                 return;
             }
+            else if( brightnessFile.Exists == false )
+            {
+                this.log.LogWarning(
+                    $"'{brightnessFile.FullName}' does not exist, can not set brightness."
+                );
+                return;
+            }
 
             if( newValue > 100 )
             {
@@ -175,6 +182,13 @@ namespace PiPictureFrame.Api.Screens
             {
                 this.log.LogWarning(
                     $"{nameof( PiTouchScreen )} only compatible on Linux systems, can not turn on or off."
+                );
+                return;
+            }
+            else if( this.powerFile.Exists == false )
+            {
+                this.log.LogWarning(
+                    $"'{powerFile.FullName}' does not exist, can not turn screen on or off.."
                 );
                 return;
             }
