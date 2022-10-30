@@ -43,6 +43,11 @@ namespace PiPictureFrame.Api.Renders
             RegexOptions.Compiled | RegexOptions.ExplicitCapture
         );
 
+        private static readonly Regex currentFileIndexRegex = new Regex(
+            @"CURRENT_FILE_INDEX=(?<index>\d+)",
+            RegexOptions.Compiled | RegexOptions.ExplicitCapture
+        );
+
         // ---------------- Constructor ----------------
 
         public PqivRenderer( ILogger log ) :
@@ -247,6 +252,10 @@ namespace PiPictureFrame.Api.Renders
                 {
                     this.log.LogDebug( "PQIV: " + line );
                     this.CurrentPicturePath = new FileInfo( match.Groups["fileName"].Value );
+                }
+                else if ( currentFileIndexRegex.IsMatch( line ) )
+                {
+                    this.log.LogDebug( "PQIV: " + line );
                 }
                 else
                 {
