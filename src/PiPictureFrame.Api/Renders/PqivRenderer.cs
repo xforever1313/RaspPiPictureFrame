@@ -18,7 +18,7 @@
 
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace PiPictureFrame.Api.Renders
 {
@@ -100,7 +100,7 @@ namespace PiPictureFrame.Api.Renders
         {
             if( this.isLinux == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     "PQIV can only be run on Linux, nothing will be rendered"
                 );
                 return;
@@ -154,7 +154,7 @@ namespace PiPictureFrame.Api.Renders
             info.CreateNoWindow = true;
             info.FileName = defaultPqivLocation;
 
-            this.log.LogInformation( "Starting Pqiv with arguments: " + info.Arguments );
+            this.log.Information( "Starting Pqiv with arguments: " + info.Arguments );
 
             this.pqivProcess = new Process();
             this.pqivProcess.StartInfo = info;
@@ -174,25 +174,25 @@ namespace PiPictureFrame.Api.Renders
         /// </summary>
         void IDisposable.Dispose()
         {
-            this.log.LogInformation( "Quitting Pqiv..." );
+            this.log.Information( "Quitting Pqiv..." );
 
             this.pqivProcess?.StandardInput.WriteLine( "quit()" );
             bool exited = this.pqivProcess?.WaitForExit( 5000 ) ?? true;
             if( exited == false )
             {
-                this.log.LogWarning( "PQIV took too long to exit, killing process." );
+                this.log.Warning( "PQIV took too long to exit, killing process." );
                 this.pqivProcess?.Kill();
             }
 
             this.pqivProcess?.Dispose();
-            this.log.LogInformation( "Quitting Pqiv...Done!" );
+            this.log.Information( "Quitting Pqiv...Done!" );
         }
 
         public void GoToNextPicture()
         {
             if( this.isLinux == false )
             {
-                this.log.LogWarning( "Windows Machine, can not run PQIV and render picture." );
+                this.log.Warning( "Windows Machine, can not run PQIV and render picture." );
                 return;
             }
             
@@ -250,16 +250,16 @@ namespace PiPictureFrame.Api.Renders
                 Match match = currentPictureRegex.Match( line );
                 if( match.Success )
                 {
-                    this.log.LogDebug( "PQIV: " + line );
+                    this.log.Debug( "PQIV: " + line );
                     this.CurrentPicturePath = new FileInfo( match.Groups["fileName"].Value );
                 }
                 else if ( currentFileIndexRegex.IsMatch( line ) )
                 {
-                    this.log.LogDebug( "PQIV: " + line );
+                    this.log.Debug( "PQIV: " + line );
                 }
                 else
                 {
-                    this.log.LogWarning( "PQIV: " + line );
+                    this.log.Warning( "PQIV: " + line );
                 }
             }
         }
@@ -268,7 +268,7 @@ namespace PiPictureFrame.Api.Renders
         {
             if( ( e is not null ) && ( string.IsNullOrEmpty( e.Data ) == false ) )
             {
-                this.log.LogWarning( "PQIV STDERR: " + e.Data );
+                this.log.Warning( "PQIV STDERR: " + e.Data );
             }
         }
     }

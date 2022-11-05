@@ -16,9 +16,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Microsoft.Extensions.Logging;
 using PiPictureFrame.Api.Renders;
 using PiPictureFrame.Api.Screens;
+using Serilog;
 
 namespace PiPictureFrame.Api
 {
@@ -42,6 +42,14 @@ namespace PiPictureFrame.Api
     public sealed class PiPictureFrameApi : IPiPictureFrameApi, IDisposable
     {
         // ---------------- Fields ----------------
+
+        public static readonly DirectoryInfo AppDataDirectory =
+            new DirectoryInfo(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData ),
+                    "RaspPiPictureFrame"
+                )
+            );
 
         private readonly TaskScheduler taskScheduler;
 
@@ -91,39 +99,42 @@ namespace PiPictureFrame.Api
 
         public void Init()
         {
+            // CreateDirectory already no-ops of the directory exists.
+            Directory.CreateDirectory( AppDataDirectory.FullName );
+
             this.Settings.LoadSettings();
-            this.log.LogInformation( "User Settings Loaded." );
+            this.log.Information( "User Settings Loaded." );
 
             this.Screen.Refresh();
             this.Screen.SetBrightness( this.Settings.Settings.Brightness );
-            this.log.LogInformation( "Refreshed Screen Settings." );
+            this.log.Information( "Refreshed Screen Settings." );
 
             this.Renderer.Init( this.apiConfig.PictureDirectory );
-            this.log.LogInformation( "Renderer Started." );
+            this.log.Information( "Renderer Started." );
 
             this.taskScheduler.UpdateTasks( this.Settings.Settings );
             this.Settings.OnUpdatedSettings += Settings_OnUpdatedSettings;
             this.taskScheduler.Start();
-            this.log.LogInformation( "Task Scheduler Started." );
+            this.log.Information( "Task Scheduler Started." );
         }
 
         public void Dispose()
         {
-            this.log.LogInformation( "Stopping Task Scheduler." );
+            this.log.Information( "Stopping Task Scheduler." );
             this.Settings.OnUpdatedSettings -= Settings_OnUpdatedSettings;
             this.taskScheduler.Dispose();
 
-            this.log.LogInformation( "Stopping System Controller." );
+            this.log.Information( "Stopping System Controller." );
             IDisposable system = this.System;
             system.Dispose();
 
-            this.log.LogInformation( "Stopping Renderer." );
+            this.log.Information( "Stopping Renderer." );
             this.Renderer.Dispose();
 
-            this.log.LogInformation( "Stopping Screen." );
+            this.log.Information( "Stopping Screen." );
             this.Screen.Dispose();
 
-            this.log.LogInformation( "Usr Settings Saved." );
+            this.log.Information( "Usr Settings Saved." );
             this.Settings.SaveSettings();
         }
 

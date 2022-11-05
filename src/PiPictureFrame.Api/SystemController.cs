@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace PiPictureFrame.Api
 {
@@ -76,7 +76,7 @@ namespace PiPictureFrame.Api
             }
             catch( IOException e )
             {
-                this.log.LogError(
+                this.log.Error(
                     "Error getting drive information: " + Environment.NewLine + e
                 );
             }
@@ -86,7 +86,7 @@ namespace PiPictureFrame.Api
 
         public void ExitProcess()
         {
-            this.log.LogInformation( "Request made to exit the process" );
+            this.log.Information( "Request made to exit the process" );
             this.OnExitRequest?.Invoke();
         }
     }

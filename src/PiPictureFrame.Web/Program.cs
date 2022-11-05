@@ -19,6 +19,7 @@
 using Mono.Options;
 using PiPictureFrame.Api;
 using Prometheus;
+using Serilog;
 
 bool showHelp = false;
 bool showVersion = false;
@@ -107,14 +108,28 @@ try
 
     var builder = WebApplication.CreateBuilder( args );
 
+    DirectoryInfo logDirectory = new DirectoryInfo(
+        Path.Combine( PiPictureFrameApi.AppDataDirectory.FullName, "logs" )
+    );
+
+    FileInfo logFile = new FileInfo(
+        Path.Combine( logDirectory.FullName, "log.txt" )
+    );
+
     // Add services to the container.
     builder.Services.AddControllersWithViews();
 
-    ILogger apiLogger;
-    using( var logFactory = LoggerFactory.Create( logBuilder => logBuilder.AddSimpleConsole() ) )
-    {
-        apiLogger = logFactory.CreateLogger( nameof( PiPictureFrameApi ) );
-    }
+    var apiLogger = new LoggerConfiguration()
+        .WriteTo.Console(
+            restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose
+        )
+        .WriteTo.File(
+            logFile.FullName,
+            restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+            retainedFileCountLimit: 10
+        ).CreateLogger();
+
+    builder.WebHost.UseSerilog( apiLogger );
 
     var apiConfig = new PiPictureFrameApiConfig();
     if( string.IsNullOrEmpty( pictureDirectory ) == false )
@@ -144,8 +159,12 @@ try
     using( var api = new PiPictureFrameApi( apiConfig, apiLogger ) )
     {
         builder.Services.AddSingleton<IPiPictureFrameApi>( api );
+        builder.Logging.ClearProviders();
+        builder.Logging.AddSerilog( apiLogger );
 
         var app = builder.Build();
+
+        app.UseSerilogRequestLogging();
 
         // Configure the HTTP request pipeline.
         if( !app.Environment.IsDevelopment() )

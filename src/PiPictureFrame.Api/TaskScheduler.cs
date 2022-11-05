@@ -16,9 +16,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Impl;
+using Serilog;
 
 namespace PiPictureFrame.Api
 {
@@ -148,7 +148,7 @@ namespace PiPictureFrame.Api
             if( currentJob is not null )
             {
                 this.scheduler.DeleteJob( currentJob.Key );
-                this.log.LogInformation( $"{jobName} deleted" );
+                this.log.Information( $"{jobName} deleted" );
             }
 
             // If our new value is null,
@@ -171,7 +171,7 @@ namespace PiPictureFrame.Api
                 .WithCronSchedule( cronString ).Build();
 
             this.scheduler.ScheduleJob( job, trigger );
-            this.log.LogInformation( $"{jobName} started with cron string: {cronString}" );
+            this.log.Information( $"{jobName} started with cron string: {cronString}" );
 
             return job;
         }
@@ -198,7 +198,7 @@ namespace PiPictureFrame.Api
             if( currentJob is not null )
             {
                 this.scheduler.DeleteJob( currentJob.Key );
-                this.log.LogInformation( $"{jobName} deleted" );
+                this.log.Information( $"{jobName} deleted" );
             }
 
             // If our new value is null,
@@ -223,7 +223,7 @@ namespace PiPictureFrame.Api
                 .Build();
 
             this.scheduler.ScheduleJob( job, trigger );
-            this.log.LogInformation( $"{jobName} started with interval: {span.TotalMinutes} minutes." );
+            this.log.Information( $"{jobName} started with interval: {span.TotalMinutes} minutes." );
 
             return job;
         }

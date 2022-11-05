@@ -28,16 +28,8 @@ namespace PiPictureFrame.Api
 
         // ---------------- Fields ----------------
 
-        private static readonly DirectoryInfo settingsDirectory =
-            new DirectoryInfo(
-                Path.Combine(
-                    Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
-                    "RaspPiPictureFrame"
-                )
-            );
-
         private static readonly FileInfo settingsFile = new FileInfo(
-            Path.Combine( settingsDirectory.FullName, "Settings.xml" )
+            Path.Combine( PiPictureFrameApi.AppDataDirectory.FullName, "Settings.xml" )
         );
 
         // ---------------- Constructor ----------------
@@ -64,9 +56,6 @@ namespace PiPictureFrame.Api
 
         public void SaveSettings()
         {
-            // CreateDirectory already no-ops of the directory exists.
-            Directory.CreateDirectory( settingsDirectory.FullName );
-
             XDocument doc = this.Settings.ToXml();
             doc.Save( settingsFile.FullName );
         }

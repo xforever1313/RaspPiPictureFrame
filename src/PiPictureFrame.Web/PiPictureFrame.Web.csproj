@@ -11,6 +11,9 @@
     <PackageReference Include="Markdig" />
     <PackageReference Include="Mono.Options" />
     <PackageReference Include="prometheus-net.AspNetCore" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.File" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace PiPictureFrame.Api.Screens
 {
@@ -71,7 +71,7 @@ namespace PiPictureFrame.Api.Screens
         {
             if( this.isLinux == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     $"{nameof( PiTouchScreen )} only compatible on Linux systems, can not refresh."
                 );
                 return;
@@ -85,7 +85,7 @@ namespace PiPictureFrame.Api.Screens
         {
             if( this.powerFile.Exists == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     $"{nameof( PiTouchScreen )} - Missing file '{powerFile.FullName}', can not refresh."
                 );
                 return;
@@ -112,7 +112,7 @@ namespace PiPictureFrame.Api.Screens
         {
             if( brightnessFile.Exists == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     $"{nameof( PiTouchScreen )} - Missing file '{brightnessFile.FullName}', can not refresh."
                 );
                 return;
@@ -144,14 +144,14 @@ namespace PiPictureFrame.Api.Screens
             }
             else if( this.isLinux == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     $"{nameof( PiTouchScreen )} only compatible on Linux systems, can not set brightness."
                 );
                 return;
             }
             else if( brightnessFile.Exists == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     $"'{brightnessFile.FullName}' does not exist, can not set brightness."
                 );
                 return;
@@ -180,14 +180,14 @@ namespace PiPictureFrame.Api.Screens
             }
             else if( this.isLinux == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     $"{nameof( PiTouchScreen )} only compatible on Linux systems, can not turn on or off."
                 );
                 return;
             }
             else if( this.powerFile.Exists == false )
             {
-                this.log.LogWarning(
+                this.log.Warning(
                     $"'{powerFile.FullName}' does not exist, can not turn screen on or off.."
                 );
                 return;
@@ -206,7 +206,7 @@ namespace PiPictureFrame.Api.Screens
 
         private void WriteFile( FileInfo filePath, string value )
         {
-            this.log.LogInformation( $"Writing '{value}' to: {filePath.FullName}" );
+            this.log.Information( $"Writing '{value}' to: {filePath.FullName}" );
 
             File.WriteAllText( filePath.FullName, value );
         }
@@ -214,7 +214,7 @@ namespace PiPictureFrame.Api.Screens
         private string ReadFile( FileInfo filePath )
         {
             string fileContents = File.ReadAllText( filePath.FullName ).Trim();
-            this.log.LogInformation( $"Read '{fileContents}' from: {filePath.FullName}" );
+            this.log.Information( $"Read '{fileContents}' from: {filePath.FullName}" );
 
             return fileContents;
         }
