@@ -130,6 +130,7 @@ try
             logFile.FullName,
             restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
             retainedFileCountLimit: 10,
+            fileSizeLimitBytes: 512 * 1000 * 1000, // 512 MB
             shared: false
         )
         .WriteTo.Sink( inProcessLogSink, Serilog.Events.LogEventLevel.Warning )
