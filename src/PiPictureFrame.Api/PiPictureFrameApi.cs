@@ -131,6 +131,19 @@ namespace PiPictureFrame.Api
             this.log.Information( "Stopping Renderer." );
             this.Renderer.Dispose();
 
+            try
+            {
+                // Turn the screen back on before exiting
+                // so the user is not left with a blank screen.
+                this.Screen.SetOn( true );
+            }
+            catch( Exception e )
+            {
+                this.log.Error(
+                    "Error when trying to turn on screen during shutdown: " + e
+                );
+            }
+
             this.log.Information( "Stopping Screen." );
             this.Screen.Dispose();
 
