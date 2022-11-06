@@ -18,6 +18,7 @@
 
 using Mono.Options;
 using PiPictureFrame.Api;
+using PiPictureFrame.Web;
 using Prometheus;
 using Serilog;
 
@@ -119,6 +120,8 @@ try
     // Add services to the container.
     builder.Services.AddControllersWithViews();
 
+    InProcessLogSink inProcessLogSink = new InProcessLogSink( null );
+
     var apiLogger = new LoggerConfiguration()
         .WriteTo.Console(
             restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose
@@ -126,10 +129,14 @@ try
         .WriteTo.File(
             logFile.FullName,
             restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
-            retainedFileCountLimit: 10
-        ).CreateLogger();
+            retainedFileCountLimit: 10,
+            shared: false
+        )
+        .WriteTo.Sink( inProcessLogSink, Serilog.Events.LogEventLevel.Warning )
+        .CreateLogger();
 
     builder.WebHost.UseSerilog( apiLogger );
+    apiLogger.Information( $"{nameof( PiPictureFrame )} started!" );
 
     var apiConfig = new PiPictureFrameApiConfig();
     if( string.IsNullOrEmpty( pictureDirectory ) == false )
@@ -159,6 +166,7 @@ try
     using( var api = new PiPictureFrameApi( apiConfig, apiLogger ) )
     {
         builder.Services.AddSingleton<IPiPictureFrameApi>( api );
+        builder.Services.AddSingleton<InProcessLogSink>( inProcessLogSink );
         builder.Logging.ClearProviders();
         builder.Logging.AddSerilog( apiLogger );
 
@@ -200,6 +208,7 @@ try
             api.Init();
 
             app.Run();
+            apiLogger.Information( $"{nameof( PiPictureFrame )} Exited!" );
         }
         finally
         {

@@ -1,0 +1,36 @@
+﻿@using PiPictureFrame.Api;
+
+@model InProcessLogSink;
+
+@{
+    ViewData["System"] = "Log Viewer";
+    List<string> messages = Model.ToList();
+}
+
+<div class="header">
+    <h1>Recent Log Messages</h1>
+</div>
+
+<div class="content">
+    <p>
+        <strong>This only includes Warning or more severe error messages since the app was started.</strong>
+    </p>
+    <p>
+        <strong>
+            Check the logs directory in "@PiPictureFrameApi.AppDataDirectory.FullName"
+            for all logs.
+        </strong>
+    </p>
+
+    @if( messages.Any() == false )
+    {
+        <p>No messages to report :)</p>
+    }
+    else
+    {
+        @foreach( string message in Model.ToList() )
+        {
+            <p>@message</p>
+        }
+    }
+</div>
