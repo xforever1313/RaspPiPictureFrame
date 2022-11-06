@@ -42,6 +42,8 @@ namespace PiPictureFrame.Api
                 dirNames.Add( subDir.Name );
             }
 
+            dirNames.Sort();
+
             return dirNames;
         }
 
